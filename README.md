@@ -7,7 +7,7 @@
 5. [Update index.html](#update-indexhtml)
 
 ## Introduction
-This is Linux assignment 3 part 2 where I have to set up a bash script that generates a static `index.html` file containing system information on two new Arch Linux droplets. The script will automatically run every day at 5:00 AM. Then using Nginx to display the `index.html` on the web servers and 2 test file on the file server hosted by the two new Arch Linux droplet with a load balancer. Additionally, it includes a `ufw` firewall configuration for system security.
+This is Linux assignment 3 part 2 where I have to set up a bash script that generates a static `index.html` file containing system information on two new Arch Linux droplets. The script will automatically run every day at 5:00 AM. Then using Nginx to display the `index.html` on the web server and 2 test file on the file server hosted by the two new Arch Linux droplet with a load balancer. Additionally, it includes a `ufw` firewall configuration for system security.
 
 In this repository, you will find a bash script named `setup` that will create a system user name webgen and automatically set up all the files for the web server to work.
 
