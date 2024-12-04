@@ -1,0 +1,127 @@
+#!/bin/bash
+
+#: Filename     : setup
+#: Description  : This script will sets up all the files in the cloned repository.
+#: Author       : Hai Wu
+#: Date         : Nov 27 2024
+#: Version      : 1.0
+
+#: References :
+# [1]https://www.cyberciti.biz/tips/shell-root-user-check-script.html
+# [2]https://devhints.io/bash#conditionals
+# [3]https://wiki.archlinux.org/title/Pacman
+# [4]https://man.archlinux.org/man/useradd.8
+# [5]https://man.archlinux.org/man/ln.1
+
+### Error Checking ###
+
+if [[ "$EUID" -ne 0 ]]; then
+# This statment checks if this shell script is being run as the root user or not.[1]
+# "$EUID" is a built-in variable in Bash that holds the Effective User ID of the current user.[1]
+# -ne checks if Effective User ID is not equal to 0 then outputs an error message.[2]
+# 0 is the root user ID
+  echo "Please run this script with sudo privilege"
+  # Error message
+  exit 1
+  # Ends the script
+fi
+
+### Main Script ###
+
+## Init setup ##
+
+pacman -S --noconfirm --needed nginx ufw
+# Installing the required packages for the setup: 
+# nginx 
+# ufw.
+# --noconfirm ignores the confirmation message the system ask when installing the packages.[3]
+# --needed avoides reinstallating the existing packages.[3]
+
+
+sudo useradd -r -m -d /var/lib/webgen -s /usr/bin/nologin webgen
+# Creating a system user named webgen with a home directory at /var/lib/webgen and a login shell appropriate for a non-login user
+# -r Create a system account.[4]
+# -m Create the user's home directory if it does not exist.[4]
+# -d defines the home directory at /var/lib/webgen.[4]
+# -s sets the path to the user's login shell as /usr/bin/nologin to prevent login access.[4]
+
+
+mkdir /var/lib/webgen/bin
+mkdir /var/lib/webgen/documents
+mkdir /var/lib/webgen/HTML
+# creating a bin, documents, and html directory inside webgen home directory
+
+cp ./file-one /var/lib/webgen/documents
+cp ./file-two /var/lib/webgen/documents
+# Copying file-one and file-two to /var/lib/webgen/documents
+
+cp ./generate_index /var/lib/webgen/bin
+# Copying the generate_index script to /var/lib/webgen/bin
+
+chmod +x /var/lib/webgen/bin/generate_index
+# Making the generate_index bash script executable
+
+chown -R webgen:webgen /var/lib/webgen
+# Changing the user and group ownership of /var/lib/webgen and its subdirectories
+
+
+
+## Unit files ##
+
+cp ./generate-index.service /etc/systemd/system
+cp ./generate-index.timer /etc/systemd/system
+# Copying the system unit files to /etc/systemd/system
+
+systemctl daemon-reload
+# scaning for the new units files
+
+systemctl start generate-index.service
+# starting the generate-index.service to generate the initial 
+
+systemctl enable --now generate-index.timer
+# enabling the generate-index.timer to start automatically at boot and start it immediately
+
+
+
+## Nginx web server ##
+
+mv /etc/nginx/nginx.conf ~/
+# moving the original nginx.conf file to home directory as back up
+
+cp ./nginx.conf /etc/nginx
+# copying the new nginx.conf to /etc/nginx
+
+mkdir /etc/nginx/sites-available
+mkdir /etc/nginx/sites-enabled
+# making new directories for our server block 
+
+cp ./server-block.conf /etc/nginx/sites-available
+# copying the server-block.conf file to /etc/nginx/sites-available
+
+ln -s /etc/nginx/sites-available/server-block.conf /etc/nginx/sites-enabled/server-block.conf
+# making a symbolic link between /etc/nginx/sites-available/server-block.conf and /etc/nginx/sites-enabled/server-block.conf to enable the site. You can disable the site by removing the symbolic link.
+# make symbolic links instead of hard links.[5]
+
+systemctl enable --now nginx
+# enabling nginx to start automatically at boot and start it immediately
+
+
+
+##  ufw firewall ##
+
+systemctl enable --now ufw.service
+# enabling ufw.service to start automatically at boot and start it immediately
+
+ufw allow ssh
+# allowing ssh connections from anywhere
+
+ufw limit ssh
+# enabling ssh rate limiting
+# deny an incoming address if they attempt 6 initiations in 30 seconds
+
+ufw allow http
+# allowing http connetions from anywhere
+
+ufw enable
+# turning the firewall on
+
