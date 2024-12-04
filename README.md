@@ -1,24 +1,38 @@
 # 2420-assignment-3
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [Instructions](#instructions)
-3. [Web Server Result](#web-server-result)
-4. [Update index.html](#update-indexhtml)
+2. [Creating the Load Balancer](#creating-the-load-balancer)
+3. [Setting Up the Servers](#setting-up-the-servers)
+4. [Web Server Result](#web-server-result)
+5. [Update index.html](#update-indexhtml)
 
 ## Introduction
-This is an Linux assignment where I have to create a web server by setting up a bash script that generates a static `index.html` file containing system information that will automatically run every day at 5:00 AM. Then displaying the `index.html` on a web server hosted on your Arch Linux droplet using Nginx. Additionally, it includes a `ufw` firewall configuration for system security.
+This is Linux assignment 3 part 2 where I have to create a web server by setting up a bash script that generates a static `index.html` file containing system information that will automatically run every day at 5:00 AM. Then using Nginxto display the `index.html` on a web server and 2 test file on a file server hosted on two new Arch Linux droplet with a load balancer. Additionally, it includes a `ufw` firewall configuration for system security.
 
 In this repository, you will find a bash script named `setup` that will create a system user name webgen and automatically set up all the files for the web server to work.
 
 The reason we create a system user is beacause we want to make it run scripts and services only and prevent it from making system changes.
 
-## Instructions
+## Creating the Load Balancer
+1. go to digital ocean and log in to your account
+2. Create two new Arch Linux droplets for the load balancer with a web tag.
+3. Click Load Balancers in the Create dropdown menu.
+Use the following settings for the load balancer:
+- Regional
+- datacenter region: SFO3 (same as the servers)
+- Default VCP
+- External (Public)
+- Connect Droplets: use the `web` tag
+4. Click Create Load Balancer.
+
+## Setting Up the Servers
+> **_NOTE:_** You need to set up the web server on both of your new Arch Linux droplet!
 ### 1. System update
 To start off, make sure you have the latest version of Linux. If not use the following command to install the latest version:
 ```
 sudo pacman -Syu
 ```
-Then reboot your system.
+Then reboot your system
 ```
 sudo systemctl reboot
 ```
@@ -26,15 +40,16 @@ sudo systemctl reboot
 Clone this repository into your home directory.
 Use the following command to clone the repository:
 ```
-https://github.com/Abungo-w/2420-assignment-3.git
+https://github.com/Abungo-w/2420-assignment3-p2.git
 ```
 ### 3. Run the setup bash script
-Then go into the new directory you just cloned named `2420-assignment-3` and run the file named `setup`.
+Then go into the new directory you just cloned named `2420-assignment3-p2` and run the file named `setup`.
 Use the following command to run the setup file:
 ```
 sudo ./setup
 ```
 > **_NOTE:_**  The setup might fail if you don't have your linux system up to date. Make sure to update it and reboot before you run the setup file!
+
 ### 4. Test if setup is complete
 Check if the timer service is active and that the service runs successfully:
 ```
@@ -58,9 +73,11 @@ sudo ufw status verbose
 ```
 
 ## Web Server Result
-This is what the webpage should look like when you enter your Arch Linux droplet IP address on a web browser.
-![The webpage for index.html](./assets/success-screenshot.png)
+This is what the webpage should look like when you enter your Arch Linux droplet load balancer IP address on a web browser.
+![The webpage for index.html](./assets/server1.png)
 
+This is what your file server should look like when you enter `<your-load-balancer-IP-address>/documents` on a web browser.
+![File server page](./assets/file-server.png)
 
 ## Update index.html 
 If everything is setup correctly, we can futher improve `generate_index` script to include additional system information.
