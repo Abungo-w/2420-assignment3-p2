@@ -124,4 +124,3 @@ ufw allow http
 
 ufw enable
 # turning the firewall on
-
