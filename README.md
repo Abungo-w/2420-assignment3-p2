@@ -28,7 +28,7 @@ Use the following settings for the load balancer:
 ## Setting Up the Servers
 > **_NOTE:_** You need to set up the web server on both of your new Arch Linux droplet!
 ### 1. System update
-To start off, make sure you have the latest version of Linux. If not use the following command to install the latest version:
+To start off, make sure you have the latest version of Linux on your two new droplets. If not, use the following command to install the latest version:
 ```
 sudo pacman -Syu
 ```
@@ -37,10 +37,14 @@ Then reboot your system
 sudo systemctl reboot
 ```
 ### 2. Clone repository
+Before you clone the repository, you need to install git on your two new Arch Linux droplets.
+```
+sudo pacman -S git
+```
 Clone this repository into your home directory.
 Use the following command to clone the repository:
 ```
-https://github.com/Abungo-w/2420-assignment3-p2.git
+git clone https://github.com/Abungo-w/2420-assignment3-p2.git
 ```
 ### 3. Run the setup bash script
 Then go into the new directory you just cloned named `2420-assignment3-p2` and run the file named `setup`.
