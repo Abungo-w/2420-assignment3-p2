@@ -66,7 +66,7 @@ Check the status of the nginx services.
 ```
 sudo systemctl status nginx
 ```
-Test the nginx configuration for syntax errors
+Check the nginx configuration for syntax errors
 ```
 sudo nginx -t
 ```
