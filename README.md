@@ -1,10 +1,9 @@
-# 2420-assignment-3
+# 2420-assignment-3-part-2
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Creating the Load Balancer](#creating-the-load-balancer)
 3. [Setting Up the Servers](#setting-up-the-servers)
 4. [Web Server Result](#web-server-result)
-5. [Update index.html](#update-indexhtml)
 
 ## Introduction
 This is Linux assignment 3 part 2 where I have to set up a bash script that generates a static `index.html` file containing system information on two new Arch Linux droplets. The script will automatically run every day at 5:00 AM. Then using Nginx to display the `index.html` on the web server and two downloadable test file on the file server hosted by the two new Arch Linux droplet with a load balancer. Additionally, it includes a `ufw` firewall configuration for system security.
@@ -54,27 +53,6 @@ sudo ./setup
 ```
 > **_NOTE:_**  The setup might fail if you don't have your linux system up to date. Make sure to update it and reboot before you run the setup file!
 
-### 4. Test if setup is complete
-Check if the timer service is active and that the service runs successfully:
-```
-sudo systemctl status generate-index.timer
-```
-Check logs and to confirm the service's execution:
-```
-sudo journalctl -u your-service.service
-```
-Check the status of the nginx services.
-```
-sudo systemctl status nginx
-```
-Test the nginx configuration for syntax errors
-```
-sudo nginx -t
-```
-Check the status of your firewall
-```
-sudo ufw status verbose
-```
 
 ## Web Server Result
 This is what the webpage should look like when you enter your load balancer IP address on a web browser.
@@ -82,25 +60,4 @@ This is what the webpage should look like when you enter your load balancer IP a
 
 This is what your file server should look like when you enter `<your-load-balancer-IP-address>/documents` on a web browser.
 ![File server page](./assets/file-server.png)
-
-## Update index.html 
-If everything is setup correctly, we can futher improve `generate_index` script to include additional system information.
-All you need to do is edit the file with a text editor like `neo vim`:
-```
-sudo nvim /var/lib/webgen/bin/generate_index
-```
-For example, if you want to add and display cpu info, add this line into the `generate_index` script.
-```
-cpu=$(cat /proc/cpuinfo)
-```
-- `cat` reads the /proc/cpuinfo file where all the cpu info is stored, then storing it in a variable call cpu
-
-Then add a new line that calls the variable into the html body:
-```
-<p><strong>CPU info:<strong> $cpu</p>
-```
-It should look something like this:
-![Updated webpage of index.html](./assets/updated-html.png)
-> **_NOTE:_**This is just an example. You can format it and get specific cpu info or other system info to make it look better!
-
 
