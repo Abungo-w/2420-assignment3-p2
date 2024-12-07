@@ -53,7 +53,27 @@ sudo ./setup
 ```
 > **_NOTE:_**  The setup might fail if you don't have your linux system up to date. Make sure to update it and reboot before you run the setup file!
 
-
+### 4. Test if setup is complete
+Check if the timer service is active and that the service runs successfully:
+```
+sudo systemctl status generate-index.timer
+```
+Check logs and to confirm the service's execution:
+```
+sudo journalctl -u your-service.service
+```
+Check the status of the nginx services.
+```
+sudo systemctl status nginx
+```
+Test the nginx configuration for syntax errors
+```
+sudo nginx -t
+```
+Check the status of your firewall
+```
+sudo ufw status verbose
+```
 ## Web Server Result
 This is what the webpage should look like when you enter your load balancer IP address on a web browser.
 ![The webpage for index.html](./assets/server1.png)
